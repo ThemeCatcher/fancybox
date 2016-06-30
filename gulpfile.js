@@ -19,7 +19,7 @@ gulp.task('css', function () {
 
 gulp.task('default', ['js', 'css']);
 
-gulp.task('watch', function () {
+gulp.task('watch', ['default'], function () {
     gulp.watch('jquery.fancybox.js', ['js']);
     gulp.watch('jquery.fancybox.css', ['css']);
 });
