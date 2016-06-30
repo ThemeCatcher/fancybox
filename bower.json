@@ -1,0 +1,21 @@
+{
+  "name": "fancybox",
+  "description": "A fork of Fancybox 1 with maintenance fixes",
+  "main": "jquery.fancybox.js",
+  "authors": [
+    "ThemeCatcher <info@themecatcher.net>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jquery",
+    "fancybox"
+  ],
+  "homepage": "https://github.com/ThemeCatcher/fancybox",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
