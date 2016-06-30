@@ -324,7 +324,7 @@
 			loading.hide();
 
 			if (wrap.is(":visible") && false === currentOpts.onCleanup(currentArray, currentIndex, currentOpts)) {
-				$.event.trigger('fancybox-cancel');
+				$('.fancybox-inline-tmp').trigger('fancybox-cancel');
 
 				busy = false;
 				return;
@@ -391,7 +391,7 @@
 						content.html( tmp.contents() ).fadeTo(currentOpts.changeFade, 1, _finish);
 					};
 
-					$.event.trigger('fancybox-change');
+					$('.fancybox-inline-tmp').trigger('fancybox-change');
 
 					content
 						.empty()
@@ -914,7 +914,7 @@
 
 		busy = true;
 
-		$.event.trigger('fancybox-cancel');
+		$('.fancybox-inline-tmp').trigger('fancybox-cancel');
 
 		_abort();
 
@@ -959,7 +959,7 @@
 			title.empty().hide();
 			wrap.hide();
 
-			$.event.trigger('fancybox-cleanup');
+			$('.fancybox-inline-tmp, select:not(#fancybox-tmp select)').trigger('fancybox-cleanup');
 
 			content.empty();
 
