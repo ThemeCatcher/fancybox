@@ -1072,7 +1072,7 @@
 			$.fancybox.next();
 		});
 
-		if ($.fn.mousewheel) {
+		if (selectedOpts.enableMousewheel && $.fn.mousewheel) {
 			wrap.bind('mousewheel.fb', function(e, delta) {
 				if (busy) {
 					e.preventDefault();
@@ -1142,6 +1142,7 @@
 		showNavArrows : true,
 		enableEscapeButton : true,
 		enableKeyboardNav : true,
+		enableMousewheel : false,
 
 		onStart : function(){},
 		onCancel : function(){},
