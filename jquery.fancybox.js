@@ -578,11 +578,6 @@
 		},
 
 		_finish = function () {
-			if (!$.support.opacity) {
-				content.get(0).style.removeAttribute('filter');
-				wrap.get(0).style.removeAttribute('filter');
-			}
-
 			if (selectedOpts.autoDimensions) {
 				content.css('height', 'auto');
 			}
@@ -1082,10 +1077,6 @@
 					$.fancybox[ delta > 0 ? 'prev' : 'next']();
 				}
 			});
-		}
-
-		if (!$.support.opacity) {
-			wrap.addClass('fancybox-ie');
 		}
 
 		if (isIE6) {
