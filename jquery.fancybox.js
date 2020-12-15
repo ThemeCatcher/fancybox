@@ -7,7 +7,7 @@
  * Copyright (c) 2008 - 2010 Janis Skarnelis
  * That said, it is hardly a one-person project. Many people have submitted bugs, code, and offered their advice freely. Their support is greatly appreciated.
  *
- * Version: 1.3.6 (30 Jun 2016)
+ * Version: 1.3.7 (15 Dec 2020)
  * Requires: jQuery v1.3+
  *
  * Dual licensed under the MIT and GPL licenses:
