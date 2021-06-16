@@ -1,25 +1,31 @@
-var gulp = require('gulp'),
-    rename = require('gulp-rename'),
-    uglify = require('gulp-uglify'),
-    cssnano = require('gulp-cssnano');
+const { src, dest, series, parallel, watch } = require('gulp');
+const cleanCSS = require('gulp-clean-css');
+const uglify = require('gulp-uglify');
+const uglifySaveLicense = require('uglify-save-license');
+const rename = require('gulp-rename');
 
-gulp.task('js', function () {
-    return gulp.src('jquery.fancybox.js')
-               .pipe(rename({suffix: '.min'}))
-               .pipe(uglify({preserveComments: 'some'}))
-               .pipe(gulp.dest('.'));
-});
+const css = () => {
+    return src('jquery.fancybox.css')
+          .pipe(rename({ suffix: '.min' }))
+          .pipe(cleanCSS({ compatibility: 'ie8' }))
+          .pipe(dest('.'));
+};
 
-gulp.task('css', function () {
-    return gulp.src('jquery.fancybox.css')
-               .pipe(rename({suffix: '.min'}))
-               .pipe(cssnano())
-               .pipe(gulp.dest('.'));
-});
+const js = () => {
+    return src('jquery.fancybox.js')
+           .pipe(rename({ suffix: '.min' }))
+           .pipe(uglify({ ie8: true, output: { comments: uglifySaveLicense } }))
+           .pipe(dest('.'));
+};
 
-gulp.task('default', ['js', 'css']);
+const watcher = done => {
+    watch('jquery.fancybox.css', css);
+    watch('jquery.fancybox.js', js);
+    done();
+};
 
-gulp.task('watch', ['default'], function () {
-    gulp.watch('jquery.fancybox.js', ['js']);
-    gulp.watch('jquery.fancybox.css', ['css']);
-});
+exports.css = css;
+exports.js = js;
+exports.watch = watcher;
+exports.all = parallel(exports.css, exports.js);
+exports.default = series(exports.all, exports.watch)
