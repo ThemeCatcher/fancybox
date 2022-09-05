@@ -15,12 +15,12 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
-;(function($) {
+;(function($) { // eslint-disable-line no-extra-semi
 	var tmp, loading, overlay, wrap, outer, content, close, title, nav_left, nav_right,
 
 		selectedIndex = 0, selectedOpts = {}, selectedArray = [], currentIndex = 0, currentOpts = {}, currentArray = [],
 
-		ajaxLoader = null, imgPreloader = new Image(), imgRegExp = /\.(jpg|gif|png|bmp|jpeg)(.*)?$/i, swfRegExp = /[^\.]\.(swf)\s*$/i,
+		ajaxLoader = null, imgPreloader = new Image(), imgRegExp = /\.(jpg|gif|png|bmp|jpeg)(.*)?$/i, swfRegExp = /[^.]\.(swf)\s*$/i,
 
 		loadingTimer, loadingFrame = 1,
 
@@ -165,7 +165,7 @@
 
 			tmp.css('padding', (selectedOpts.padding + selectedOpts.margin));
 
-			$('.fancybox-inline-tmp').unbind('fancybox-cancel').bind('fancybox-change', function() {
+			$('.fancybox-inline-tmp').off('fancybox-cancel').on('fancybox-change', function() {
 				$(this).replaceWith(content.children());
 			});
 
@@ -184,9 +184,9 @@
 					$('<div class="fancybox-inline-tmp" />')
 						.hide()
 						.insertBefore( $(obj) )
-						.bind('fancybox-cleanup', function() {
+						.on('fancybox-cleanup', function() {
 							$(this).replaceWith(content.children());
-						}).bind('fancybox-cancel', function() {
+						}).on('fancybox-cancel', function() {
 							$(this).replaceWith(tmp.children());
 						});
 
@@ -245,7 +245,7 @@
 					ajaxLoader = $.ajax($.extend({}, selectedOpts.ajax, {
 						url : href,
 						data : selectedOpts.ajax.data || {},
-						error : function(XMLHttpRequest, textStatus, errorThrown) {
+						error : function(XMLHttpRequest) {
 							if ( XMLHttpRequest.status > 0 ) {
 								_error();
 							}
@@ -332,10 +332,10 @@
 
 			busy = true;
 
-			$(content.add( overlay )).unbind();
+			$(content.add( overlay )).off();
 
-			$(window).unbind("resize.fb scroll.fb");
-			$(document).unbind('keydown.fb');
+			$(window).off("resize.fb scroll.fb");
+			$(document).off('keydown.fb');
 
 			if (wrap.is(":visible") && currentOpts.titlePosition !== 'outside') {
 				wrap.css('height', wrap.height());
@@ -409,10 +409,10 @@
 						fx.prop = 0;
 
 						$(fx).animate({prop: 1}, {
-							 duration : currentOpts.changeSpeed,
-							 easing : currentOpts.easingChange,
-							 step : _draw,
-							 complete : finish_resizing
+							duration : currentOpts.changeSpeed,
+							easing : currentOpts.easingChange,
+							step : _draw,
+							complete : finish_resizing
 						});
 					}
 				});
@@ -438,10 +438,10 @@
 				fx.prop = 0;
 
 				$(fx).animate({prop: 1}, {
-					 duration : currentOpts.speedIn,
-					 easing : currentOpts.easingIn,
-					 step : _draw,
-					 complete : _finish
+					duration : currentOpts.speedIn,
+					easing : currentOpts.easingIn,
+					step : _draw,
+					complete : _finish
 				});
 
 				return;
@@ -489,7 +489,7 @@
 				return;
 			}
 
-			titleStr = $.isFunction(currentOpts.titleFormat) ? currentOpts.titleFormat(titleStr, currentArray, currentIndex, currentOpts) : _format_title(titleStr);
+			titleStr = typeof currentOpts.titleFormat === 'function' ? currentOpts.titleFormat(titleStr, currentArray, currentIndex, currentOpts) : _format_title(titleStr);
 
 			if (!titleStr || titleStr === '') {
 				title.hide();
@@ -550,14 +550,14 @@
 
 		_set_navigation = function() {
 			if (currentOpts.enableEscapeButton || currentOpts.enableKeyboardNav) {
-				$(document).bind('keydown.fb', function(e) {
-					if (e.keyCode == 27 && currentOpts.enableEscapeButton) {
+				$(document).on('keydown.fb', function(e) {
+					if (e.which == 27 && currentOpts.enableEscapeButton) {
 						e.preventDefault();
 						$.fancybox.close();
 
-					} else if ((e.keyCode == 37 || e.keyCode == 39) && currentOpts.enableKeyboardNav && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+					} else if ((e.which == 37 || e.which == 39) && currentOpts.enableKeyboardNav && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
 						e.preventDefault();
-						$.fancybox[ e.keyCode == 37 ? 'prev' : 'next']();
+						$.fancybox[ e.which == 37 ? 'prev' : 'next']();
 					}
 				});
 			}
@@ -595,17 +595,17 @@
 			_set_navigation();
 
 			if (currentOpts.hideOnContentClick) {
-				content.bind('click', $.fancybox.close);
+				content.on('click', $.fancybox.close);
 			}
 
 			if (currentOpts.hideOnOverlayClick) {
-				overlay.bind('click', $.fancybox.close);
+				overlay.on('click', $.fancybox.close);
 			}
 
-			$(window).bind("resize.fb", $.fancybox.resize);
+			$(window).on("resize.fb", $.fancybox.resize);
 
 			if (currentOpts.centerOnScroll) {
-				$(window).bind("scroll.fb", $.fancybox.center);
+				$(window).on("scroll.fb", $.fancybox.center);
 			}
 
 			if (currentOpts.type == 'iframe') {
@@ -788,8 +788,8 @@
 
 		$(this)
 			.data('fancybox', $.extend({}, options, ($.metadata ? $(this).metadata() : {})))
-			.unbind('click.fb')
-			.bind('click.fb', function(e) {
+			.off('click.fb')
+			.on('click.fb', function(e) {
 				e.preventDefault();
 
 				if (busy) {
@@ -798,7 +798,7 @@
 
 				busy = true;
 
-				$(this).blur();
+				$(this).trigger('blur');
 
 				selectedArray = [];
 				selectedIndex = 0;
@@ -935,10 +935,10 @@
 
 		$(close.add( nav_left ).add( nav_right )).hide();
 
-		$(content.add( overlay )).unbind();
+		$(content.add( overlay )).off();
 
-		$(window).unbind("resize.fb scroll.fb");
-		$(document).unbind('keydown.fb');
+		$(window).off("resize.fb scroll.fb");
+		$(document).off('keydown.fb');
 
 		content.find('iframe').attr('src', isIE6 && /^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank');
 
@@ -988,10 +988,10 @@
 			fx.prop = 1;
 
 			$(fx).animate({ prop: 0 }, {
-				 duration : currentOpts.speedOut,
-				 easing : currentOpts.easingOut,
-				 step : _draw,
-				 complete : _cleanup
+				duration : currentOpts.speedOut,
+				easing : currentOpts.easingOut,
+				step : _draw,
+				complete : _cleanup
 			});
 
 		} else {
@@ -1054,21 +1054,21 @@
 			nav_right = $('<a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a>')
 		);
 
-		close.click($.fancybox.close);
-		loading.click($.fancybox.cancel);
+		close.on('click', $.fancybox.close);
+		loading.on('click', $.fancybox.cancel);
 
-		nav_left.click(function(e) {
+		nav_left.on('click', function(e) {
 			e.preventDefault();
 			$.fancybox.prev();
 		});
 
-		nav_right.click(function(e) {
+		nav_right.on('click', function(e) {
 			e.preventDefault();
 			$.fancybox.next();
 		});
 
 		if (selectedOpts.enableMousewheel && $.fn.mousewheel) {
-			wrap.bind('mousewheel.fb', function(e, delta) {
+			wrap.on('mousewheel.fb', function(e, delta) {
 				if (busy) {
 					e.preventDefault();
 
@@ -1143,7 +1143,7 @@
 		onError : function(){}
 	};
 
-	$(document).ready(function() {
+	$(function() {
 		$.fancybox.init();
 	});
 
